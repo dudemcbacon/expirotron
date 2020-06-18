@@ -68,8 +68,9 @@ def filter_seeders(torrent):
     torrent_id = list(torrent.keys())[0]
     name = torrent[torrent_id][b"name"]
     total_seeds = torrent[torrent_id][b"total_seeds"]
-    print(total_seeds)
-    if total_seeds <= 0:
+    time_since_download = torrent[torrent_id][b"time_since_download"]
+    time_since_download_days = timedelta(seconds=time_since_download).days
+    if total_seeds == 0 and time_since_download_days > 7:
         return True
     else:
         print(f"Filtering {name} because its ratio it has seeds")
@@ -130,11 +131,11 @@ accepted_label = list(filter(filter_accepted_labels, reformated_torrents))
 
 remove = []
 
-tracker = list(filter(filter_accepted_tracker_status, accepted_label))
-tracker_ids = list(map(torrent_ids, tracker))
-for id in tracker_ids:
-    torrents[id].setdefault("reason", []).append("tracker")
-    remove.append(id)
+# tracker = list(filter(filter_accepted_tracker_status, accepted_label))
+# tracker_ids = list(map(torrent_ids, tracker))
+# for id in tracker_ids:
+# torrents[id].setdefault("reason", []).append("tracker")
+# remove.append(id)
 
 age = list(filter(filter_accepted_age, accepted_label))
 age_ids = list(map(torrent_ids, age))
@@ -182,7 +183,7 @@ for id in remove:
         }
     )
     print(f"Removing {name_long}...")
-    #  print(client.call('core.remove_torrent', id, True))
+    client.call('core.remove_torrent', id, True)
 
 names.sort(key=lambda x: x["Name"])
 
