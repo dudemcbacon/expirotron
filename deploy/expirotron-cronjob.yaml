@@ -1,0 +1,37 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: expirotron
+spec:
+  schedule: "0 0 1 * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: expirotronn
+            image: dudemcbacon/expirotron:latest
+            env:
+              - name: DELUGE_IP
+                value: '10.0.10.26'
+              - name: DELUGE_PORT
+                value: '58846'
+              - name: DELUGE_USER
+                value: 'localclient'
+              - name: DELUGE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: expirotron-deluge-pass
+                    key: password
+              - name: SMTP_HOST
+                value: 'milosh.dev'
+              - name: SMTP_PORT
+                value: '587'
+              - name: SMTP_USER
+                value: 'brandon@milosh.dev'
+              - name: SMTP_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: expirotron-smtp-pass
+                    key: password
+          restartPolicy: OnFailure
