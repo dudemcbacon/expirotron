@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: expirotron
 spec:
-  schedule: "0 0 1 * *"
+  schedule: "@daily"
   jobTemplate:
     spec:
       template:
