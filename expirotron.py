@@ -183,7 +183,7 @@ for id in remove:
         }
     )
     print(f"Removing {name_long}...")
-    #client.call('core.remove_torrent', id, True)
+    client.call('core.remove_torrent', id, True)
 
 names.sort(key=lambda x: x["Name"])
 
