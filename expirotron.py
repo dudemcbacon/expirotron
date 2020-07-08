@@ -17,7 +17,7 @@ def reformat(torrents):
 
 
 def filter_accepted_age(torrent):
-    accepted_age = datetime.now() - timedelta(days=30)
+    accepted_age = datetime.now() - timedelta(days=14)
     torrent_id = list(torrent.keys())[0]
     time_added = datetime.fromtimestamp(torrent[torrent_id][b"time_added"])
     name = torrent[torrent_id][b"name"]
